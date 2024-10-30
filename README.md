@@ -76,7 +76,7 @@ print("Lectura completada y datos guardados en 'datos_ecg.txt'.")
 ```
 
 ### Quinta parte
-El código "Lab_3_ Señales.py" se importaron las librerías necesarias para el procesamiento de señales, análisis estadístico y graficación.
+El código "Lab_4_ Señales.py" se importaron las librerías necesarias para el procesamiento de señales, análisis estadístico y graficación.
 ```python
 from scipy.signal import butter, filtfilt
 import matplotlib.pyplot as plt
@@ -84,3 +84,81 @@ import numpy as np
 from scipy.signal import find_peaks
 import pywt
 ```
+La librería de scipy.signal, contiene funciones para procesar señales, como el filtrado y la detección de picos. La de matplotlib.pyplot, se usa para graficar los resultados y la de pywt ayuda para transformadas wavelet.
+
+### Sexta parte
+
+Se define un filtro pasa banda de Butterworth para filtrar la señal entre 10 Hz y 150 Hz. Y se crean dos funciones butter_bandpass para calcular los coeficientes del filtro y apply_filter para aplicar el filtro a la señal.
+
+```python
+def butter_bandpass(lowcut, highcut, fs, order=4):
+    nyquist = 0.5 * fs
+    low = lowcut / nyquist
+    high = highcut / nyquist
+    b, a = butter(order, [low, high], btype='band')
+    return b, a
+
+def apply_filter(data, lowcut, highcut, fs):
+    b, a = butter_bandpass(lowcut, highcut, fs, order=4)
+    y = filtfilt(b, a, data)
+    return y
+```
+Se definieron los valores del filtro pasabanda con:
+-3 dB de atenuación en 10 Hz y 450 Hz.
+-20 dB de atenuación en 2.5Hz y 5 KHz.
+
+<img src="https://github.com/user-attachments/assets/0577f77c-ebbb-40c6-aebf-ef738c78662a" alt="Descripción de la imagen" width="400"/>
+
+Y se calcularon las frecuencias características del filtro convirtiendolas a radianes por segundo:
+
+Ω1=2𝜋×5Hz=31.416 rad/s
+
+Ω2=2𝜋×300Hz=1884.96 rad/s
+
+Ω𝐿=2𝜋×10Hz=62.83 rad/s
+
+Ωu=2𝜋×150Hz=942.478rad/s
+
+Después se calcularon A y 𝐵 para conocer la frecuencia del paso bajo:
+
+$$A=\frac{\Omega_{1}^2 - \Omega_{L}\Omega_{u}}{\Omega_{1}(\Omega_{u} - \Omega_{L})}$$
+
+$$B=\frac{\Omega_{2}^2 - \Omega_{L}\Omega_{u}}{\Omega_{2}(\Omega_{u} - \Omega_{L})}$$
+
+El valor de A da un resultado de 2,052 y el valor de B da un resultado de 2,052, entonces se toma el valor de 2,052:
+
+$$
+n = \frac{\log_{10} \left( \frac{10^{(k1/10)}-1}{10^{(k2/10)}-1} \right)}{2 \log_{10} \left( \frac{ \Omega_{1}}{ \Omega_{2}} \right)} = 3,199
+$$
+
+
+Dando como resultado que el orden del filtro sea 4. Debido a esto se va a escoger un polimio característico como se puede observar en el código de MATLAB "filtro_pasabanda.m":
+```matlab
+H_original = 1 / ((s^2 + 0.76536*s + 1) * (s^2 + 1.84776*s + 1));
+```
+Se crea una transformación para 𝑠. En donde se va a  reemplazar la variable s en la función de transferencia original que se mostró anteriormente.
+
+```matlab
+s_subs = (s^2 + 177647.4) / (2764.6 * s);
+```
+
+Y se gráfico para combrobar que los valores establecidos si se cumplieran.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
