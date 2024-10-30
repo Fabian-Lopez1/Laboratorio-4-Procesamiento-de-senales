@@ -6,7 +6,7 @@ int valorECG = 0;
 
 void setup() {
   // Iniciar la comunicación serial a 1000 baudios
-  Serial.begin(250000);
+  Serial.begin(500000);
   // Esperar a que se inicie la comunicación serial
   while (!Serial) {
     ; // Espera hasta que se conecte el puerto serial
@@ -23,5 +23,5 @@ void loop() {
   Serial.println(valorECG);
 
   // Esperar un breve momento antes de la siguiente lectura
-   delayMicroseconds(333); // 1 milisegundo para una tasa de muestreo de aproximadamente 1000 Hz
+   delay(1); // 1 milisegundo para una tasa de muestreo de aproximadamente 1000 Hz
 }
