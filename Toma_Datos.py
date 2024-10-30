@@ -3,8 +3,8 @@ import time
 
 # Configurar el puerto serie y la velocidad
 com_port = 'COM4'  # Cambia esto si es necesario
-baud_rate = 250000
-duration = 60  # Duración en segundos para leer datos
+baud_rate = 500000
+duration = 300  # Duración en segundos para leer datos
 
 # Crear un objeto de conexión serial
 ser = serial.Serial(com_port, baud_rate)
