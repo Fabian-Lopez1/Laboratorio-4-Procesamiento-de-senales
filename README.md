@@ -22,4 +22,4 @@ Para la adquisición de la señal, se utilizó un sensor AD8232, junto con un AR
 
 **Recomendaciones para terceros:** Se recomienda el software "Anaconda Navigator" con su herramienta "Spyder" para el análisis en Python. Al final de este repositorio, se incluyen las instrucciones detalladas para la correcta utilización del código.
 
-El paciente del que se obtuvieron los datos, ha autorizado su uso y distribución 
+**_El paciente del que se obtuvieron los datos, ha autorizado su uso y distribución_**
