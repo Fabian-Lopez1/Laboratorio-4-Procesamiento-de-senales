@@ -7,7 +7,7 @@ El propósito de este laboratorio es analizar la variabilidad de la frecuencia c
   * **Actividad Parasimpática**: Promueve el estado de "reposo y digestión". Se activa en situaciones de calma y se asocia con la liberación de acetilcolina, lo que reduce la frecuencia cardíaca y promueve la digestión y la relajación.
 ### Efecto de la actividad simpática y parasimpática en la frecuencia cardiaca
   El efecto de la actividad **simpatica** incrementa la frecuencia cardíaca y la contractilidad del corazón, por otro lado la actividad **parasimpatica** disminuye la frecuencia cardíaca, facilitando un estado de calma y recuperación.
-###Variabilidad de la frecuencia cardiaca (HRV)
+### Variabilidad de la frecuencia cardiaca (HRV)
  Se refiere a las fluctuaciones en el intervalo R-R (el tiempo entre latidos sucesivos del corazón). Un alto nivel de HRV indica una buena capacidad de adaptación del sistema nervioso y un equilibrio entre las actividades simpáticas y parasimpáticas, tiene frecuencias de  interes: 
   * **Baja Frecuencia (LF)**: Asociada con la actividad simpática.
   * **Alta Frecuencia (HF)**: Asociada con la actividad parasimpática.
