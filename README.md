@@ -15,8 +15,17 @@ El propósito de este laboratorio es analizar la variabilidad de la frecuencia c
 ### Transformada Wavelet 
  La transformada wavelet es una herramienta matemática utilizada para analizar señales en diferentes escalas de tiempo y frecuencia. Se aplica en el análisis de señales biológicas, como la ECG, para estudiar variaciones en la frecuencia cardíaca, detectar anomalías, y     descomponer señales complejas en componentes más simples, tiene los siguientes tipos de interes: 
   * **Wavelets de Daubechies**: Las wavelets de Daubechies son una familia de wavelets que se caracterizan por su buena resolución temporal y frecuencial, definidas por un número específico de coeficientes polinómicos. Su estructura ortogonal permite descomponer señales    sin    pérdida de información, lo que las hace especialmente útiles en el análisis de señales no estacionarias, como el ECG.
+    
+    <img src="https://github.com/user-attachments/assets/aa065fac-adeb-45ef-9ee0-3ceabdf676df" alt="Descripción de la imagen" width="500"/>
+
   * **Wavelets de Haar**: Las wavelets de Haar son las más simples y se basan en funciones escalonadas que representan cambios abruptos en una señal. Aunque su resolución temporal es limitada, son fáciles de implementar y se utilizan comúnmente en la detección de           discontinuidades, así como en aplicaciones de compresión de datos y análisis de imágenes.
+
+     <img src="https://github.com/user-attachments/assets/852f21f5-d7b2-49bd-abc1-ddcffe1af9d9" alt="Descripción de la imagen" width="500"/>
+
   * **Wavelets de Morlet**: La wavelet de Morlet combina una onda sinusoidal con una envolvente gaussiana, ofreciendo buena resolución en tiempo y frecuencia. Son ideales para el análisis de señales biomédicas, permitiendo identificar patrones oscilatorios y captar tanto   información temporal como frecuencial, lo que las convierte en una herramienta valiosa en el estudio de la variabilidad de la frecuencia cardíaca.
+
+     <img src="https://github.com/user-attachments/assets/c21c7bd4-cde8-42d2-a2c5-030ce8bf3516" alt="Descripción de la imagen" width="500"/>
+
 
 Para la adquisición de la señal, se utilizó un sensor AD8232, junto con un ARDUINO para realizar la conversión analógica-digital (ADC) de la señal y transferir los datos al entorno de Python. El análisis de la señal se realizó utilizando Python, donde se importaron, visualizaron y procesaron los datos.
 
