@@ -76,7 +76,7 @@ print("Lectura completada y datos guardados en 'datos_ecg.txt'.")
 ```
 
 ### Quinta parte
-El código "Lab_4_ Señales.py" se importaron las librerías necesarias para el procesamiento de señales, análisis estadístico y graficación.
+El código "main.py" se importaron las librerías necesarias para el procesamiento de señales, análisis estadístico y graficación.
 ```python
 from scipy.signal import butter, filtfilt
 import matplotlib.pyplot as plt
