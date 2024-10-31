@@ -88,6 +88,14 @@ La librería de scipy.signal, contiene funciones para procesar señales, como el
 
 ### Sexta parte
 
+Se hace la lectura de la Señal y se define la Frecuencia de Muestreo.
+
+```python
+emg_signal = np.loadtxt('datos2.txt')
+fs = 1000
+```
+### Séptima parte
+
 Se define un filtro pasa banda de Butterworth para filtrar la señal entre 10 Hz y 150 Hz. Y se crean dos funciones butter_bandpass para calcular los coeficientes del filtro y apply_filter para aplicar el filtro a la señal.
 
 ```python
@@ -139,26 +147,282 @@ H_original = 1 / ((s^2 + 0.76536*s + 1) * (s^2 + 1.84776*s + 1));
 Se crea una transformación para 𝑠. En donde se va a  reemplazar la variable s en la función de transferencia original que se mostró anteriormente.
 
 ```matlab
-s_subs = (s^2 + 177647.4) / (2764.6 * s);
+s_subs = (s^2 + 59215.89274) / (879.648 * s);
 ```
 
 Y se gráfico para combrobar que los valores establecidos si se cumplieran.
 
+![image](https://github.com/user-attachments/assets/69d9e6a9-106c-4350-bfc9-f57bc5dc8158)
+
+
+### Octava parte
+Vamos a visualizar la señal original y filtrada.
+
+```python
+plt.figure(figsize=(12, 6))
+
+# Señal original
+plt.subplot(2, 1, 1)
+plt.plot(time, emg_signal, label='Señal Original', color='blue')
+
+# Señal filtrada
+plt.subplot(2, 1, 2)
+plt.plot(time, filtered_emg, label='Señal Filtrada', color='red')
+plt.show()
+
+```
+Primero la vamos a observar con una duración de 20 segundos para poder observar la forma de la señal:
+
+![image](https://github.com/user-attachments/assets/5c962ccc-1260-4c2d-b976-62e94f5bb680)
+
+Ahora, en esta imágen ya vemos como se ve durante esos 5 minutos:
+
+![image](https://github.com/user-attachments/assets/1d7f7ad8-26eb-4d0a-9d9b-ae0f302541c5)
+
+La señal tiene un rango de amplitud entre aproximadamente 1000 y 4000 en la señal sin filtrar, y entre -1000 y 1500 en la señal filtrada, la señal filtrada muestra un rango de frecuencias de 10 a 150 Hz, eliminando el ruido de baja frecuencia y frecuencias superiores que no son relevantes para el análisis de picos R.
+
+### Novena parte
+Detectamos los picos R en la señal filtrada.
+
+```python
+Amplitud_picos = 500
+distancia_estimada = int(fs * 0.4)
+peaks, _ = find_peaks(filtered_emg, distance=distancia_estimada, height=Amplitud_picos)
+
+# Obtener tiempos de los picos R
+r_peaks_time = time[peaks]
+```
+find_peaks, detecta de picos con una separación mínima (distance) y un valor mínimo (height).
+
+### Décima parte
+
+Calculamos la diferencia entre tiempos de picos R (rr_intervals), dando los intervalos R-R, también calculamos la media y desviación estándar de los intervalos R-R.
+
+```python
+rr_intervals = np.diff(r_peaks_time)
+media = np.mean(rr_intervals)
+desviacion = np.std(rr_intervals)
+```
+Dandonos los valores de:
+
+Cantidad total de intervalos R-R detectados: 92
+
+------------------------------
+Intervalo 1: 0.990 s
+
+
+Intervalo 2: 1.008 s
+
+Intervalo 3: 1.032 s
+
+Intervalo 4: 1.050 s
+
+Intervalo 5: 1.066 s
+
+Intervalo 6: 1.017 s
+
+Intervalo 7: 0.980 s
+
+Intervalo 8: 0.980 s
+
+Intervalo 9: 0.978 s
+
+Intervalo 10: 0.975 s
+
+Intervalo 11: 0.996 s
+
+Intervalo 12: 0.997 s
+
+Intervalo 13: 1.389 s
+
+Intervalo 14: 1.050 s
+
+Intervalo 15: 1.080 s
+
+Intervalo 16: 1.081 s
+
+Intervalo 17: 1.043 s
+
+Intervalo 18: 1.277 s
+
+Intervalo 19: 0.973 s
+
+Intervalo 20: 1.004 s
+
+Intervalo 21: 1.008 s
+
+Intervalo 22: 0.829 s
+
+Intervalo 23: 1.022 s
+
+Intervalo 24: 1.067 s
+
+Intervalo 25: 1.062 s
+
+Intervalo 26: 1.066 s
+
+Intervalo 27: 1.017 s
+
+Intervalo 28: 1.024 s
+
+Intervalo 29: 1.034 s
+
+Intervalo 30: 1.020 s
+
+Intervalo 31: 0.891 s
+
+Intervalo 32: 1.094 s
+
+Intervalo 33: 1.025 s
+
+Intervalo 34: 1.031 s
+
+Intervalo 35: 1.402 s
+
+Intervalo 36: 1.048 s
+
+Intervalo 37: 1.034 s
+
+Intervalo 38: 1.034 s
+
+Intervalo 39: 0.910 s
+
+Intervalo 40: 1.006 s
+
+Intervalo 41: 0.985 s
+
+Intervalo 42: 0.957 s
+
+Intervalo 43: 0.961 s
+
+Intervalo 44: 1.249 s
+
+Intervalo 45: 1.192 s
+
+Intervalo 46: 1.171 s
+
+Intervalo 47: 1.115 s
+
+Intervalo 48: 0.996 s
+
+Intervalo 49: 0.999 s
+
+Intervalo 50: 1.004 s
+
+Intervalo 51: 1.017 s
+
+Intervalo 52: 1.137 s
+
+Intervalo 53: 1.020 s
+
+Intervalo 54: 0.996 s
+
+Intervalo 55: 0.957 s
+
+Intervalo 56: 1.480 s
+
+Intervalo 57: 0.961 s
+
+Intervalo 58: 0.962 s
+
+Intervalo 59: 0.962 s
+
+Intervalo 60: 1.062 s
+
+Intervalo 61: 1.143 s
+
+Intervalo 62: 1.120 s
+
+Intervalo 63: 1.074 s
+
+Intervalo 64: 1.839 s
+
+Intervalo 65: 1.123 s
+
+Intervalo 66: 1.123 s
+
+Intervalo 67: 1.102 s
+
+Intervalo 68: 1.452 s
+
+Intervalo 69: 0.989 s
+
+Intervalo 70: 1.006 s
+
+Intervalo 71: 1.844 s
+
+Intervalo 72: 1.069 s
+
+Intervalo 73: 1.050 s
+
+Intervalo 74: 0.992 s
+
+Intervalo 75: 1.055 s
+
+Intervalo 76: 1.004 s
+
+Intervalo 77: 1.011 s
+
+Intervalo 78: 1.003 s
+
+Intervalo 79: 1.368 s
+
+Intervalo 80: 1.050 s
+
+Intervalo 81: 1.050 s
+
+Intervalo 82: 1.032 s
+
+Intervalo 83: 1.487 s
+
+Intervalo 84: 1.013 s
+
+Intervalo 85: 1.015 s
+
+Intervalo 86: 1.022 s
+
+Intervalo 87: 1.342 s
+
+Intervalo 88: 0.889 s
+
+Intervalo 89: 0.905 s
+
+Intervalo 90: 1.048 s
+
+Intervalo 91: 0.978 s
+
+Intervalo 92: 1.078 s
+
+------------------------------
+
+Media de los intervalos R-R: 1.0766478473129355
+
+Desviación estándar de los intervalos R-R: 0.16821923088165547
 
 
 
+La media de los intervalos R-R (1.0766 s) equivale a una frecuencia cardíaca promedio de aproximadamente 56 latidos por minuto (bpm), en el contexto de un ECG normal, los intervalos R-R suelen ser de entre 0.6 y 1.2 segundos, lo que corresponde a una frecuencia cardíaca típica de entre 50 y 100 latidos por minuto.
+
+La desviación estándar es de 0.1682 s, lo cual indica cierta variabilidad en los intervalos. Esto es generalmente positivo, pues una mayor variabilidad en reposo suele asociarse con una respuesta flexible del sistema nervioso autónomo y una buena salud cardiovascular.
+
+Con esta señal, podríamos dividir los intervalos R-R en bandas de frecuencia LF (0.04-0.15 Hz) y HF (0.15-0.4 Hz) mediante un análisis de wavelet. La potencia en LF representa en general la actividad parasimpática, mientras que HF se asocia a lo simpático. Al calcular la relación LF/HF.
+
+Algunos intervalos son inusualmente largos, como los de 1.389 s, 1.402 s y 1.839 s, lo que podría indicar pausas o irregularidades en el ritmo. La media y desviación estándar de estos intervalos sugieren una posible influencia del sistema nervioso autónomo (tanto simpático como parasimpático). La presencia de intervalos largos y una frecuencia cardíaca baja podrían indicar una regulación más orientada hacia el tono parasimpático.
 
 
+# Instrucciones para el usuario 
+
+Se deberá cambiar la línea para cargar su archivo en el programa de "main.py".
+```python
+emg_signal = np.loadtxt('nombre_de_la_señal.txt')
+```
 
 
-
-
-
-
-
-
-
-
-
-
+Por favor, cite este artículo:
+<br>
+Lopez L., Sandoval R. (2024). Github 'Laboratorio 3 Procesamiento de señales'[Online].
+### Informacion de contacto
+est.fabiana.lopez@unimilitar.edu.co
+<br>
+est.tania.sandoval@unimilitar.edu.co
 
