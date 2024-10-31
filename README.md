@@ -140,7 +140,7 @@ n = \frac{\log_{10} \left( \frac{10^{(k1/10)}-1}{10^{(k2/10)}-1} \right)}{2 \log
 $$
 
 
-Dando como resultado que el orden del filtro sea 4. Debido a esto se va a escoger un polimio característico como se puede observar en el código de MATLAB "filtro_pasabanda.m":
+Dando como resultado que el orden del filtro sea 4. Debido a esto se va a escoger un polimio característico como se puede observar en el código de MATLAB "filtros.m":
 ```matlab
 H_original = 1 / ((s^2 + 0.76536*s + 1) * (s^2 + 1.84776*s + 1));
 ```
