@@ -91,7 +91,7 @@ La librería de scipy.signal, contiene funciones para procesar señales, como el
 Se hace la lectura de la Señal y se define la Frecuencia de Muestreo.
 
 ```python
-emg_signal = np.loadtxt('datos2.txt')
+ecg_signal = np.loadtxt('datos2.txt')
 fs = 1000
 ```
 ### Séptima parte
@@ -163,11 +163,11 @@ plt.figure(figsize=(12, 6))
 
 # Señal original
 plt.subplot(2, 1, 1)
-plt.plot(time, emg_signal, label='Señal Original', color='blue')
+plt.plot(time, ecg_signal, label='Señal Original', color='blue')
 
 # Señal filtrada
 plt.subplot(2, 1, 2)
-plt.plot(time, filtered_emg, label='Señal Filtrada', color='red')
+plt.plot(time, filtered_ecg, label='Señal Filtrada', color='red')
 plt.show()
 
 ```
@@ -187,7 +187,7 @@ Detectamos los picos R en la señal filtrada.
 ```python
 Amplitud_picos = 500
 distancia_estimada = int(fs * 0.4)
-peaks, _ = find_peaks(filtered_emg, distance=distancia_estimada, height=Amplitud_picos)
+peaks, _ = find_peaks(filtered_ecg, distance=distancia_estimada, height=Amplitud_picos)
 
 # Obtener tiempos de los picos R
 r_peaks_time = time[peaks]
@@ -405,16 +405,56 @@ La media de los intervalos R-R (1.0766 s) equivale a una frecuencia cardíaca pr
 
 La desviación estándar es de 0.1682 s, lo cual indica cierta variabilidad en los intervalos. Esto es generalmente positivo, pues una mayor variabilidad en reposo suele asociarse con una respuesta flexible del sistema nervioso autónomo y una buena salud cardiovascular.
 
-Con esta señal, podríamos dividir los intervalos R-R en bandas de frecuencia LF (0.04-0.15 Hz) y HF (0.15-0.4 Hz) mediante un análisis de wavelet. La potencia en LF representa en general la actividad parasimpática, mientras que HF se asocia a lo simpático. Al calcular la relación LF/HF.
+Con esta señal, podríamos dividir los intervalos R-R en bandas de frecuencia LF (0.04-0.15 Hz) y HF (0.15-0.4 Hz) mediante un análisis de wavelet. La potencia en LF representa en general la actividad simparasimpática, mientras que HF se asocia a lo parasimpático. Al calcular la relación LF/HF.
 
 Algunos intervalos son inusualmente largos, como los de 1.389 s, 1.402 s y 1.839 s, lo que podría indicar pausas o irregularidades en el ritmo. La media y desviación estándar de estos intervalos sugieren una posible influencia del sistema nervioso autónomo (tanto simpático como parasimpático). La presencia de intervalos largos y una frecuencia cardíaca baja podrían indicar una regulación más orientada hacia el tono parasimpático.
 
+### Onceava parte
+
+Se hace el análisis de frecuencia con CWT, en donde scales_lf define un rango de valores para la banda de baja frecuencia (LF), con coeficientes de 7 hasta 25. Estos valores están calibrados para abarcar aproximadamente el rango de frecuencia 0.04-0.15 Hz. Y los de scales_hf que definen un rango más bajo de escalas para la banda de alta frecuencia (HF), con coeficientes de de 3 a 6, que abarca aproximadamente 0.15-0.4 Hz.
+
+```python
+scales_lf = np.arange(7, 26)  # Aproximado para 0.04-0.15 Hz
+scales_hf = np.arange(3, 7)   # Aproximado para 0.15-0.4 Hz
+```
+Se hace el cálculo de la Transformada de Wavelet Continua (CWT), se selecciona la wavelet compleja Morlet (cmor1.5-1.0) para realizar la CWT. Utilizando rr_intervals con las escalas scales_lf y el período de muestreo media_rr.
+
+```python
+wavelet = 'cmor1.5-1.0'
+coefficients_lf, frequencies_lf = pywt.cwt(rr_intervals, scales_lf, wavelet, sampling_period=media_rr)
+coefficients_hf, frequencies_hf = pywt.cwt(rr_intervals, scales_hf, wavelet, sampling_period=media_rr)
+
+```
+Dando la siguiente gráfica:
+
+![image](https://github.com/user-attachments/assets/7423b337-e3f0-4bb4-afd8-faf8bf2e97d1)
+
+Para este tipo de análisis, se usa la wavelet "cmor1.5-1.0" (Morlet compleja). Esta wavelet es adecuada para estudios de frecuencia cardíaca debido a su habilidad para capturar variaciones en la frecuencia y amplitud con alta resolución en el dominio del tiempo y frecuencia. La wavelet Morlet es particularmente útil en el análisis de señales biomédicas, ya que es simétrica y mantiene una buena representación de la fase y frecuencia.
+
+En el primer gráfico (banda LF), la potencia espectral se concentra en frecuencias que varían entre 0.05 y 0.13 Hz. Observamos una tendencia general de la potencia a mantenerse estable en gran parte del tiempo, con picos ocasionales. La estabilidad de la potencia espectral en esta banda indica que hay consistencia en las variaciones lentas de la frecuencia cardíaca, que suelen estar relacionadas con la modulación simpática del sistema nervioso autónomo.
+
+Hacia el final del periodo, parece haber un ligero aumento en la potencia en frecuencias más altas dentro de la banda LF (aproximadamente 0.12-0.13 Hz). Esto sugiere un incremento temporal en la actividad parasimpática, pero los cambios en esta banda son relativamente suaves y controlados.
+
+En el segundo gráfico (banda HF), la potencia espectral varía de manera más abrupta, especialmente hacia el final del periodo. Las frecuencias dentro de la banda HF muestran picos altos de amplitud en momentos específicos. La potencia espectral es más alta en el rango de 0.2 a 0.3 Hz, con un aumento de actividad en ciertos puntos que puede representar una respuesta rápida en la modulación parasimpática del sistema cardíaco( como ocurre en los patrones de respiración).
+
+A diferencia de la banda LF, la banda HF tiene variaciones más marcadas en la potencia espectral, lo que indica que durante este tiempo el sistema que esta tomando el control es el sistema nervioso parasimpático. 
+
+Los gráficos muestran cómo las bandas LF y HF reflejan distintos aspectos de la variabilidad de la frecuencia cardíaca. La banda LF se mantiene relativamente estable con picos moderados, reflejando un control autónomo más constante. En cambio, la banda HF muestra cambios más pronunciados en la potencia espectral, indicando una respuesta rápida a factores externos o internos, como la respiración. Este análisis sugiere que el uso de la wavelet Morlet compleja es adecuado para capturar estas características dinámicas, proporcionando una buena representación de las variaciones en ambas bandas de frecuencia.
 
 # Instrucciones para el usuario 
 
 Se deberá cambiar la línea para cargar su archivo en el programa de "main.py".
 ```python
-emg_signal = np.loadtxt('nombre_de_la_señal.txt')
+ecg_signal = np.loadtxt('nombre_de_la_señal.txt')
+```
+ La persona debe cambiar este valor según la frecuencia de muestreo de su propia señal. 
+ ```python
+fs = "frecuencia que se requiere"
+```
+Si la persona quiere analizar otro rango de frecuencias, teniendo en cuenta que si se cambia las condiciones del filtro pueden variar.
+ ```python
+lowcut = "frecuencia que se requiere"
+highcut = "frecuencia que se requiere"
 ```
 
 
